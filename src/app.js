@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const userRoutes = require('./routes/userRoutes');
 const app = express();
 require('dotenv').config();
 
@@ -19,9 +20,11 @@ mongoose.connect(mongoUrl)
 });
 
 
+// Usar las rutas de usuario
+app.use('/user',userRoutes);
+
 // Iniciar el servidor
 const PORT = process.env.PORT || 1000;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
-
