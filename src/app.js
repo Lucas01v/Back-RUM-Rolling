@@ -1,22 +1,21 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const connectDB = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
+const petRoutes = require('./routes/petRoutes');
+const appointmentRoutes = require('./routes/appointmentRoutes');
+
 const app = express();
-require('dotenv').config();
 
+// Connect to MongoDB
+connectDB();
 
-
-// Middleware para parsear JSON
+// Middleware
 app.use(express.json());
 
-// Conexión a MongoDB
-
-const mongoUrl = process.env.MONGO_URL;
-mongoose.connect(mongoUrl)
-    .then(() => {
-    console.log('Conectado a MongoDB');
-}).catch((err) => {
-    console.error('Error de conexión a MongoDB:', err);
-});
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/pets', petRoutes);
+app.use('/api/appointments', appointmentRoutes);
 
 
 // Iniciar el servidor
