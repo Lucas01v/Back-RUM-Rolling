@@ -1,8 +1,11 @@
 const express = require('express');
-const Pet = require('../models/Pet');
-const User = require('../models/User');
+const { registerPet } = require('../controllers/petController');
+
+//importar  el controlador petController
 const router = express.Router();
 
+// rutas
+registerPet
 // Crear mascota
 // JOYA
 router.post('/register', async (req, res) => {
