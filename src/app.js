@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const userRoutes = require('./routes/userRoutes');
+// const userRoutes = require('./routes/userRoutes');
+const authRoute = require('./routes/authRoute');
 const app = express();
 require('dotenv').config();
 
@@ -21,7 +22,8 @@ mongoose.connect(mongoUrl)
 
 
 // Usar las rutas de usuario
-app.use('/user',userRoutes);
+// app.use('/user',userRoutes);
+app.use('/api/auth', authRoute);
 
 // Iniciar el servidor
 const PORT = process.env.PORT || 1000;
