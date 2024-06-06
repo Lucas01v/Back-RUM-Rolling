@@ -1,14 +1,19 @@
 const express = require('express');
-const { registerPet } = require('../controllers/petController');
+const { registerPet, getAllPets, deletePet, updatePet } = require('../controllers/petController');
 
 //importar  el controlador petController
-const router = express.Router();
+const petRouter = express.Router();
 
 // rutas
-registerPet
+petRouter.get('/', getAllPets);
+petRouter.post('/register', registerPet);
+petRouter.delete('/delete/:id', deletePet);
+petRouter.patch('/update/:id', updatePet);
+
+
 // Crear mascota
 // JOYA
-router.post('/register', async (req, res) => {
+/* petRouter.post('/register', async (req, res) => {
     try {
         const {ownerNick, species, name, race, age} = req.body;
 
@@ -29,40 +34,42 @@ router.post('/register', async (req, res) => {
     } catch (err) {
         res.status(400).send({ error: err.message });
     }
-});
+}); */
 
 // Obtener todas las mascotas
 // JOYA
-router.get('/', async (req, res) => {
+petRouter.get('/', async (req, res) => {
     try {
         const pets = await Pet.find();
         res.status(200).send(pets);
     } catch (err) {
-        res.status(500).send({ error: 'An unexpected error occurred' });
+        res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
     }
 });
 
+
+//CAMBIAR POR FILTRO DE ID POR UNO DE NOMBRE
 // Obtener una mascota por ID
 // JOYA
-router.get('/:id', async (req, res) => {
+petRouter.get('/:id', async (req, res) => {
     try {
         const pet = await Pet.findById(req.params.id).populate('owner');
         if (!pet) {
-            return res.status(404).send({ error: 'Pet not found' });
+            return res.status(404).send({ error: 'Mascota no encontrada' });
         }
         res.status(200).send(pet);
     } catch (err) {
-        res.status(500).send({ error: 'An unexpected error occurred' });
+        res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
     }
 });
 
 // Eliminar mascota
 // JOYA
-router.delete('/:id', async (req, res) => {
+/* petRouter.delete('/:id', async (req, res) => {
     try {
         const pet = await Pet.findByIdAndDelete(req.params.id);
         if (!pet) {
-            return res.status(404).send({ error: 'Pet not found' });
+            return res.status(404).send({ error: 'Mascota no encontrada' });
         }
 
         // Buscar al usuario por su nick y decrementar el contador de mascotas
@@ -72,10 +79,10 @@ router.delete('/:id', async (req, res) => {
             await owner.save();
         }
 
-        res.status(200).send({ message: 'Pet deleted successfully' });
+        res.status(200).send({ message: 'Mascota eliminada correctamente' });
     } catch (err) {
-        res.status(500).send({ error: 'An unexpected error occurred' });
+        res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
     }
-});
+}); */
 
-module.exports = router;
+module.exports = petRouter;
