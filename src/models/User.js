@@ -2,28 +2,33 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-    nick: {
+    email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     },
     password:{
         type: String,
-        required: true
+        required: true,
+        minlenght: 8
     },
     name: {
         type: String,
         required: true
     },
+    DNI: {
+        type: String,
+        required: true,
+        unique: true,
+        match: /^[0-9]+$/,
+        maxlength: 11
+    },
     phone: {
         type: Number,
         required: true
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
+    
     petCount: {
         type: Number,
         default: 0
