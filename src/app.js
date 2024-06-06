@@ -21,20 +21,10 @@ app.use(express.json());
 
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:${PORT}',
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
-/* // Conexión a MongoDB
-
-const mongoUrl = process.env.MONGO_URL;
-mongoose.connect(mongoUrl)
-    .then(() => {
-    console.log('Conectado a MongoDB');
-}).catch((err) => {
-    console.error('Error de conexión a MongoDB:', err);
-}); */
-
 
 // Usar las rutas de usuario
 app.use('/user',userRoutes);
