@@ -1,10 +1,10 @@
 const express = require('express');
-// const mongoose = require('mongoose');
-const connectDB = require('./config/db');//conexión a la bd
-var cors = require('cors')
-const userRoutes = require('./routes/userRoutes');
-const petRouter = require('./routes/petRoutes');
+const cors = require('cors');
 const morgan = require('morgan');
+
+const connectDB = require('./config/db');//conexión a la bd
+const petRouter = require('./routes/petRoutes');
+
 require('dotenv').config();
 // const petRoutes = require('./routes/petRoutes');
 
@@ -12,26 +12,24 @@ require('dotenv').config();
 const app = express();
 
 app.use(morgan('combined'))
-
-//Conecta la BD
-connectDB(); 
-
-// Middleware para parsear JSON
 app.use(express.json());
-
-
+app.use('/uploads', express.static('uploads'));
+app.use(express.json());
 app.use(cors({
     origin: 'http://localhost:${PORT}',
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Usar las rutas de usuario
-app.use('/user',userRoutes);
 app.use('/pet', petRouter);
 
+
+
+
+connectDB(); 
+
 // Iniciar el servidor
-const PORT = process.env.PORT || 1000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

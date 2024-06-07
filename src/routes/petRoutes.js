@@ -1,27 +1,28 @@
 const express = require('express');
-const { registerPet, getAllPets, deletePet, updatePet } = require('../controllers/petController');
+const multer = require('multer');
+const path = require('path');
+const { registerPet, getAllPets, deletePet, updatePet, getPet } = require('../controllers/petController');
 
-//importar  el controlador petController
-const petRouter = express.Router();
-
-// rutas
-petRouter.get('/', getAllPets);
-petRouter.post('/register', registerPet);
-petRouter.delete('/delete/:id', deletePet);
-petRouter.patch('/update/:id', updatePet);
-
-
-// Obtener una mascota por ID
-petRouter.get('/:name', async (req, res) => {
-    try {
-        const pet = await Pet.findById(req.params.name).populate('owner');
-        if (!pet) {
-            return res.status(404).send({ error: 'Mascota no encontrada' });
-        }
-        res.status(200).send(pet);
-    } catch (err) {
-        res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
+// Configuración de multer para almacenar archivos en el sistema de archivos
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/'); // Carpeta donde se almacenarán las imágenes
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); // Nombre del archivo
     }
 });
+
+const upload = multer({ storage: storage });
+
+// Importar el controlador petController
+const petRouter = express.Router();
+
+// Rutas
+petRouter.get('/', getAllPets);
+petRouter.get('/:name', getPet);
+petRouter.post('/register/:ownerId', upload.single('image'), registerPet); // Modificado para manejar la subida de la imagen
+petRouter.delete('/delete/:id', deletePet);
+petRouter.patch('/update/:id', updatePet);
 
 module.exports = petRouter;

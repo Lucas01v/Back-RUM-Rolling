@@ -1,28 +1,31 @@
 const Pet = require('../models/Pet');
 const User = require('../models/User');
 
-const registerPet =  async (req, res) => {
+const registerPet = async (req, res) => {
+    try {
+        const ownerId = req.params.ownerId;
+        const {species, name, race, age } = req.body;
 
-        try {
-            const {ownerNick, species, name, race, age} = req.body;
-    
-            // Buscar el usuario por su nick
-            const owner = await User.findOne({ nick: ownerNick });
-            if (!owner) {
-                return res.status(404).send({ error: 'Owner not found' });
-            }
-    
-            const newPet = new Pet({ owner: owner.nick , species, name, race, age});
-            await newPet.save();
-    
-            // Incrementar el contador de mascotas del usuario
-            owner.petCount += 1;
-            await owner.save();
-    
-            res.status(201).send(newPet);
-        } catch (err) {
-            res.status(400).send({ error: err.message });
+        // Buscar el usuario por su nick
+        const owner = await User.findById(ownerId);
+        if (!owner) {
+            return res.status(404).send({ error: 'Owner not found' });
         }
+
+        // Obtener la URL de la imagen si existe
+        const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+        const newPet = new Pet({ owner: owner.name, species, name, race, age, image });
+        await newPet.save();
+
+        // Incrementar el contador de mascotas del usuario
+        owner.petCount += 1;
+        await owner.save();
+
+        res.status(201).send(newPet);
+    } catch (err) {
+        res.status(400).send({ error: err.message });
+    }
 };
 
 const getAllPets =  async (req, res) => {
@@ -68,4 +71,17 @@ const updatePet = async (req, res) => {
     }
 };
 
-module.exports = {registerPet, getAllPets, deletePet, updatePet};
+const getPet = async (req, res) => {
+    try {
+        const { name } = req.params;
+        const pet = await Pet.findOne({ name });
+        if (!pet) {
+            return res.status(404).send({ error: 'Mascota no encontrada' });
+        }
+        res.status(200).send(pet);
+    } catch (err) {
+        res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
+    }
+};
+
+module.exports = {registerPet, getAllPets, deletePet, updatePet, getPet};

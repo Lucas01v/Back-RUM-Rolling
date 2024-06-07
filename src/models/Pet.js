@@ -23,6 +23,10 @@ const petSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    image: {
+        type: String,
+        required: false
+    },
     timestamp: {
         type: Date,
         default: Date.now // Asigna automáticamente la fecha y hora actual

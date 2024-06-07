@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
-    nick: {
+    
+    email: {
         type: String,
         required: true,
         unique: true
@@ -18,11 +19,6 @@ const userSchema = new mongoose.Schema({
     phone: {
         type: Number,
         required: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
     },
     petCount: {
         type: Number,
