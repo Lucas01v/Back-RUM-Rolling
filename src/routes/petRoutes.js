@@ -7,7 +7,7 @@ const petRouter = express.Router();
 
 // Rutas
 petRouter.get('/', getAllPets);
-petRouter.get('/:name', getPet);
+petRouter.get('/:id', getPet);
 petRouter.post('/register/:ownerId', upload.single('image'), registerPet); // Modificado para manejar la subida de la imagen
 petRouter.delete('/delete/:id', deletePet);
 petRouter.patch('/update/:id', updatePet);
