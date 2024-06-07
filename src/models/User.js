@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
+    
     email: {
         type: String,
         required: true,
@@ -28,11 +29,10 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    
-    petCount: {
-        type: Number,
-        default: 0
-    }
+    pets: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Pet'
+    }]
 
 }, { collection: 'users' });
 
