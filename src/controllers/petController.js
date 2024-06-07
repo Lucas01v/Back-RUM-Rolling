@@ -1,6 +1,7 @@
 const Pet = require('../models/Pet');
 const User = require('../models/User');
 
+
 const registerPet = async (req, res) => {
     try {
         const ownerId = req.params.ownerId;
