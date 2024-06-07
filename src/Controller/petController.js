@@ -106,8 +106,8 @@ const updatePet = async (req, res) => {
 
 const getPet = async (req, res) => {
     try {
-        const { name } = req.params;
-        const pet = await Pet.findOne({ name });
+        const { id } = req.params;
+        const pet = await Pet.findById(id);
         if (!pet) {
             return res.status(404).send({ error: 'Mascota no encontrada' });
         }

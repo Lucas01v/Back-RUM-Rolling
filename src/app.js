@@ -17,18 +17,13 @@ const app = express();
 app.use(morgan('combined'));
 
 // Configurar CORS
-app.use(cors({
-    origin: 'http://localhost:${PORT}', // Reemplaza con el dominio que necesites permitir
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
-    allowedHeaders: ['Content-Type', 'Authorization'], // Encabezados permitidos
-}));
 
 app.use(morgan('combined'))
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:${PORT}',
+    origin: 'http://localhost:5173',
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
