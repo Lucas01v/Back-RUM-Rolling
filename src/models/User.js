@@ -23,7 +23,11 @@ const userSchema = new mongoose.Schema({
     petCount: {
         type: Number,
         default: 0
-    }
+    },
+    pets: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Pet'
+    }]
 
 }, { collection: 'users' });
 

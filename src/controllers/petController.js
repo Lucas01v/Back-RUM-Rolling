@@ -19,8 +19,8 @@ const registerPet = async (req, res) => {
         const newPet = new Pet({ owner: owner.name, species, name, race, age, image });
         await newPet.save();
 
-        // Incrementar el contador de mascotas del usuario
-        owner.petCount += 1;
+        // Agregar la nueva mascota al array de mascotas del usuario
+        owner.pets.push(newPet._id);
         await owner.save();
 
         res.status(201).send(newPet);
