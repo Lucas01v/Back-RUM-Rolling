@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const login = async (req, res) => {
-    console.log('controller login funcionando...');
 
     try {
         const { email, password } = req.body;
@@ -30,8 +29,8 @@ const login = async (req, res) => {
         }
 
         // Generar un token JWT
-        const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        console.log(token);
+        //const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        //console.log(token);
 
         // Si las credenciales son válidas, enviar una respuesta exitosa con el token
         res.status(200).send({ message: 'Logueo correcto', token });
