@@ -49,5 +49,23 @@ async function registerUser(req, res) {
   }
 }
 
+// Obtener todas las mascotas de un usuario por su ID
+const getUserPets = async (req, res) => {
+  try {
+      const userId = req.params.userId;
 
-module.exports = { getAllUsers, registerUser};
+      // Buscar al usuario por su ID
+      const user = await User.findById(userId).populate('pets');
+      if (!user) {
+          return res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+
+      // Devolver las mascotas del usuario
+      res.status(200).json({ message: 'Mascotas recuperadas exitosamente', pets: user.pets });
+  } catch (error) {
+      console.error("Error al recuperar las mascotas del usuario:", error);
+      res.status(500).json({ error: 'Error al recuperar las mascotas del usuario' });
+  }
+};
+
+module.exports = { getAllUsers, registerUser, getUserPets};
