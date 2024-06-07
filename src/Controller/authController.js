@@ -28,10 +28,9 @@ const login = async (req, res) => {
         if (!isPasswordValid) {
             return res.status(401).send({ error: 'Contraseña invalida' });
         }
-        console.log('generar token');
+
         // Generar un token JWT
         const token = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        console.log('generado token');
         console.log(token);
 
         // Si las credenciales son válidas, enviar una respuesta exitosa con el token

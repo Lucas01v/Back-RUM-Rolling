@@ -1,13 +1,14 @@
 const Pet = require('../models/Pet');
 const User = require('../models/User');
-
+const fs = require('fs');
+const path = require('path');
 
 const registerPet = async (req, res) => {
     try {
         const ownerId = req.params.ownerId;
         const {species, name, race, age } = req.body;
 
-        // Buscar el usuario por su nick
+        
         const owner = await User.findById(ownerId);
         if (!owner) {
             return res.status(404).send({ error: 'Owner not found' });
@@ -16,7 +17,7 @@ const registerPet = async (req, res) => {
         // Obtener la URL de la imagen si existe
         const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-        const newPet = new Pet({ owner: owner.name, species, name, race, age, image });
+        const newPet = new Pet({ owner: ownerId, species, name, race, age, image });
         await newPet.save();
 
         // Agregar la nueva mascota al array de mascotas del usuario
@@ -38,22 +39,53 @@ const getAllPets =  async (req, res) => {
         }
 };
 
-const deletePet =  async (req, res) => {
+const deletePet = async (req, res) => {
     try {
-        const pet = await Pet.findByIdAndDelete(req.params.id);
+        const pet = await Pet.findById(req.params.id);
         if (!pet) {
             return res.status(404).send({ error: 'Mascota no encontrada' });
         }
 
-        // Buscar al usuario por su nick y decrementar el contador de mascotas
-        const owner = await User.findOne({ nick: pet.owner });
-        if (owner) {
-            owner.petCount -= 1;
-            await owner.save();
+         // Eliminar la foto de la mascota si existe
+         if (pet.image) {
+            const imagePath = path.join(__dirname, '..', pet.image); // Construye la ruta completa de la imagen
+            console.log('Ruta completa de la imagen:', imagePath);
+
+            // Verificar manualmente si el archivo existe usando métodos asincrónicos
+            fs.access(imagePath, fs.constants.F_OK, (err) => {
+                if (!err) {
+                    console.log('El archivo de la imagen existe, eliminando...');
+                    fs.unlink(imagePath, (unlinkErr) => {
+                        if (unlinkErr) {
+                            console.error('Error al eliminar la imagen:', unlinkErr);
+                        } else {
+                            console.log('Foto eliminada');
+                        }
+                    });
+                } else {
+                    console.log('El archivo de la imagen no existe:', imagePath);
+                }
+            });
         }
+
+        // Eliminar la mascota del array de mascotas del propietario
+        console.log('Eliminando mascota del usuario');
+        const owner = await User.findById(pet.owner);
+        if (owner) {
+            console.log('Usuario encontrado');
+            owner.pets.pull(pet._id); // Elimina la mascota del array de mascotas del usuario
+            await owner.save();
+            console.log('Mascota eliminada del usuario');
+        }
+
+        // Eliminar la mascota de la base de datos
+        console.log('Eliminando mascota de la base de datos');
+        await Pet.findByIdAndDelete(req.params.id);
+        console.log('Mascota eliminada de la base de datos');
 
         res.status(200).send({ message: 'Mascota eliminada correctamente' });
     } catch (err) {
+        console.error('Error al eliminar mascota:', err);
         res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
     }
 };
