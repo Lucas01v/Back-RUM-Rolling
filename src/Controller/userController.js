@@ -68,4 +68,17 @@ const getUserPets = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers, registerUser, getUserPets};
+const deleteUser = async (req, res) => {
+  try {
+      const userId = req.body.userId; // Obtener el ID del usuario desde el cuerpo de la solicitud
+      const deletedUser = await User.findByIdAndDelete(userId); // Buscar y eliminar al usuario por su ID
+      if (!deletedUser) {
+          return res.status(404).json({ error: 'Usuario no encontrado' }); // Si el usuario no se encuentra, devuelve un error
+      }
+      res.status(200).json({ message: 'Usuario eliminado correctamente' }); // Si se elimina correctamente, devuelve un mensaje de éxito
+  } catch (error) {
+      res.status(500).json({ error: 'Error al eliminar usuario', message: error.message }); // Si hay algún error, devuelve un error
+  }
+};
+
+module.exports = { getAllUsers, registerUser, getUserPets, deleteUser};

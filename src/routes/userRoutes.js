@@ -1,11 +1,10 @@
 const express = require('express');
-const { getAllUsers, registerUser, getUserPets} = require('../Controller/userController');
-const { createAppointment, getAppointments } = require('../Controller/appointmentController');
+const { registerUser, getUserPets} = require('../Controller/userController');
+const { createAppointment, getAppointments} = require('../Controller/appointmentController');
 const authMiddleware = require('../middleware/authMiddleware'); // middleware de autenticación
 
 const userRouter = express.Router();
 
-userRouter.get('/users', getAllUsers);
 userRouter.post('/register', registerUser);
 userRouter.get('/:userId/pets', authMiddleware, getUserPets);
 

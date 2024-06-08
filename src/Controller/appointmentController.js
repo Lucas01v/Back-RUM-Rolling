@@ -28,4 +28,13 @@ const getAppointments = async (req, res) => {
     }
 };
 
-module.exports = {createAppointment, getAppointments};
+const getAllAppointments = async (req, res) => {
+    try {
+        const appointments = await Appointment.find().populate('pet'); // Obtener todas las citas y popular la información de la mascota
+        res.json(appointments); // Enviar respuesta con las citas
+    } catch (error) {
+        res.status(500).json({ error: error.message }); // Enviar respuesta con error
+    }
+};
+
+module.exports = {createAppointment, getAppointments, getAllAppointments};
