@@ -1,5 +1,6 @@
 const Appointment = require('../models/Appointment');
 const Pet = require('../models/Pet');
+const User = require('../models/User');
 
 // Crear una nueva cita
 const createAppointment = async (req, res) => {
@@ -49,4 +50,29 @@ const getAppointmentsByDate = async (req, res) => {
     }
 };
 
-module.exports = {createAppointment, getAppointments, getAllAppointments, getAppointmentsByDate};
+const cancelAppointment = async (req, res) => {
+    try {
+        const { userId, appointmentId } = req.params;
+
+        // Verificar si el usuario existe
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Usuario no encontrado' });
+        }
+
+        // Verificar si el turno pertenece al usuario
+        const appointment = await Appointment.findOne({ _id: appointmentId, user: userId });
+        if (!appointment) {
+            return res.status(404).json({ message: 'Turno no encontrado para este usuario' });
+        }
+
+        // Eliminar el turno
+        await Appointment.findByIdAndDelete(appointmentId);
+
+        res.status(200).json({ message: 'Turno eliminado correctamente' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+module.exports = {createAppointment, getAppointments, getAllAppointments, getAppointmentsByDate, cancelAppointment};
