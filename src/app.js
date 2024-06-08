@@ -6,6 +6,13 @@ const appointmentRoutes = require('./routes/appointmentRoutes');
 
 const app = express();
 
+// Configuración de CORS
+app.use(cors({
+    origin: ['http://localhost:3000', 'https://localhost:5173'],
+    methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 // Connect to MongoDB
 connectDB();
 
@@ -15,7 +22,7 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/pets', petRoutes);
-app.use('/api/appointments', appointmentRoutes);
+app.use('/api/appointments', appointmentRoutes); //ruta de turnos
 
 
 // Iniciar el servidor
