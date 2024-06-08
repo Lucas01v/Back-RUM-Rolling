@@ -37,4 +37,16 @@ const getAllAppointments = async (req, res) => {
     }
 };
 
-module.exports = {createAppointment, getAppointments, getAllAppointments};
+const getAppointmentsByDate = async (req, res) => {
+    const userId = req.params.userId;
+    const date = req.query.date; // Obtener la fecha desde la consulta
+
+    try {
+        const appointments = await Appointment.find({ user: userId, date: { $eq: new Date(date) } }).populate('pet'); // Buscar citas del usuario para la fecha específica y popular la información de la mascota
+        res.json(appointments); // Enviar respuesta con las citas
+    } catch (error) {
+        res.status(500).json({ error: error.message }); // Enviar respuesta con error
+    }
+};
+
+module.exports = {createAppointment, getAppointments, getAllAppointments, getAppointmentsByDate};
