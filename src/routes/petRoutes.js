@@ -1,9 +1,13 @@
 const express = require('express');
-const upload = require('../middleware/multerConfig'); // Importar el middleware de multer
+const upload = require('../middleware/multerConfig');
+const { authMiddleware } = require('../middleware/authMiddleware');
 const { registerPet, getAllPets, deletePet, updatePet, getPet } = require('../Controller/petController');
 
 // Importar el controlador petController
 const petRouter = express.Router();
+
+// Aplicar el middleware de autenticación a todas las rutas
+petRouter.use(authMiddleware);
 
 // Rutas
 petRouter.get('/', getAllPets);

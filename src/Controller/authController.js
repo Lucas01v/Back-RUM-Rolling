@@ -11,7 +11,7 @@ const login = async (req, res) => {
 
         // Verificación especial para el super usuario
         if (email === emailAdmin && password === passAdmin) {
-            const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign({ email }, process.env.JWT_SECRET_ADMIN, { expiresIn: '1h' });
             console.log('Logueo correcto como super usuario');
             console.log('Token:', token);
             return res.status(200).send({ message: 'Logueo correcto como super usuario', token });

@@ -7,7 +7,6 @@ require('dotenv').config();
 // const petRoutes = require('./routes/petRoutes');
 
 const connectDB = require('./config/db');//conexión a la bd
-const verifyToken = require('./middleware/verifyToken');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const petRoutes = require('./routes/petRoutes');
@@ -31,7 +30,6 @@ app.use(cors({
 app.use('/pet', petRoutes);
 app.use('/user', userRoutes);
 app.use('/auth', authRoutes);
-
 
 
 connectDB(); 
