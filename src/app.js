@@ -1,32 +1,41 @@
 const express = require('express');
-const connectDB = require('./config/db');
+const cors = require('cors');
+const morgan = require('morgan');
+
+
+require('dotenv').config();
+// const petRoutes = require('./routes/petRoutes');
+
+const connectDB = require('./config/db');//conexión a la bd
 const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
 const petRoutes = require('./routes/petRoutes');
-const appointmentRoutes = require('./routes/appointmentRoutes');
 
-const app = express();
+const app = express(); 
 
-// Configuración de CORS
+app.use(morgan('combined'));
+
+// Configurar CORS
+
+app.use(morgan('combined'))
+app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+app.use(express.json());
 app.use(cors({
-    origin: ['http://localhost:3000', 'https://localhost:5173'],
-    methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
+    origin: 'http://localhost:5173',
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// Connect to MongoDB
-connectDB();
+app.use('/pet', petRoutes);
+app.use('/user', userRoutes);
+app.use('/auth', authRoutes);
 
-// Middleware
-app.use(express.json());
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/pets', petRoutes);
-app.use('/api/appointments', appointmentRoutes); //ruta de turnos
-
+connectDB(); 
 
 // Iniciar el servidor
-const PORT = process.env.PORT || 1000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
