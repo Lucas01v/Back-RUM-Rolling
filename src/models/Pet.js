@@ -19,6 +19,11 @@ const petSchema = new mongoose.Schema({
     race: {
         type: String,
     },
+    sex: {
+        type: String,
+        required: true,
+        enum: ['male','female']
+    },
     age: {
         type: Number,
         required: true

@@ -6,7 +6,7 @@ const path = require('path');
 const registerPet = async (req, res) => {
     try {
         const ownerId = req.params.ownerId;
-        const {species, name, race, age } = req.body;
+        const {species, name, race, sex, age } = req.body;
 
         
         const owner = await User.findById(ownerId);
@@ -17,7 +17,7 @@ const registerPet = async (req, res) => {
         // Obtener la URL de la imagen si existe
         const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-        const newPet = new Pet({ owner: ownerId, species, name, race, age, image });
+        const newPet = new Pet({ owner: ownerId, species, name, race, sex, age, image });
         await newPet.save();
 
         // Agregar la nueva mascota al array de mascotas del usuario
