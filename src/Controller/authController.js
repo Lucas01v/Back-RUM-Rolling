@@ -48,4 +48,32 @@ const login = async (req, res) => {
     }
 };
 
-module.exports = { login };
+// Registrar un nuevo usuario
+const registerUser = async (req, res) => {
+    try {
+      const { email, password, name, DNI, phone} = req.body;
+  
+      // Verificar que todos los campos requeridos estén presentes
+      if (!email || !password || !name || !DNI || !phone ) {
+        return res.status(400).json({ error: 'Todos los campos son requeridos' });
+      }
+  
+      // Verificar si el usuario ya existe
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ error: 'El usuario ya existe' });
+      }
+  
+      // Crear un nuevo usuario
+      const newUser = new User({ email, password, name, phone, DNI });
+      await newUser.save();
+  
+      // Devolver respuesta con el nuevo usuario registrado
+      return res.status(201).json({ message: 'Usuario registrado exitosamente', usuario: newUser });
+    } catch (error) {
+      console.error("Error al registrar usuario:", error);
+      return res.status(500).json({ message: 'Error al registrar usuario', error });
+    }
+  }
+
+module.exports = { login, registerUser};

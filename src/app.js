@@ -8,8 +8,9 @@ require('dotenv').config();
 
 const connectDB = require('./config/db');//conexión a la bd
 const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
+// const userRoutes = require('./routes/userRoutes');
 const petRoutes = require('./routes/petRoutes');
+const userRouter = require('./routes/userRoutes');
 
 const app = express(); 
 
@@ -28,7 +29,7 @@ app.use(cors({
 }));
 
 app.use('/pet', petRoutes);
-app.use('/user', userRoutes);
+app.use('/user', userRouter);
 app.use('/auth', authRoutes);
 
 

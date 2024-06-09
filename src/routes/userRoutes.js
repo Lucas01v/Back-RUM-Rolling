@@ -5,12 +5,16 @@ const authMiddleware = require('../middleware/authMiddleware'); // middleware de
 
 const userRouter = express.Router();
 
-userRouter.post('/register', registerUser);
-userRouter.get('/:userId/pets', authMiddleware, getUserPets);
+//Rutas
+userRouter.get('/:userId/pets', authMiddleware, getUserPets); //?
 
+//TURNOS
 userRouter.post('/:userId/new_appointment', authMiddleware, createAppointment);
 userRouter.get('/:userId/get_appointments', authMiddleware, getAppointments);
 userRouter.get('/:userId/appointments_date', authMiddleware, getAppointmentsByDate);
 userRouter.delete('/:userId/:appointmentId', authMiddleware, cancelAppointment);
+
+//ADOPCIÓN
+
 
 module.exports = userRouter;

@@ -12,4 +12,5 @@ petRouter.post('/register/:ownerId',authMiddleware, upload.single('image'), regi
 petRouter.delete('/delete/:id',authMiddleware, deletePet);
 petRouter.patch('/update/:id',authMiddleware, updatePet);
 
+
 module.exports = petRouter;
