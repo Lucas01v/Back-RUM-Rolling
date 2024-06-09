@@ -1,9 +1,11 @@
 const express = require('express');
 const { adoptPet } = require('../controllers/adoptionController');
+const authUser = require('../middlewares/authToken');
+
+// const { login } = require('../controllers/authController');
 // const auth = require('../middlewares/authMiddleware');
+const router = express.Router();
 
-const adoptionRouter = express.Router();
+router.post('/adopt', authUser, adoptPet);
 
-router.post('/adopt', adoptPet); // agregar middlewares de auth y validate token
-
-module.exports = adoptionRouter;
+module.exports = router;

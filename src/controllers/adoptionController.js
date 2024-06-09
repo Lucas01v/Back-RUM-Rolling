@@ -1,7 +1,10 @@
+
 const Adoption = require('../models/adoptionModel');
 const Pet = require('../models/Pet');
 
 const adoptPet = async (req, res) => {
+  console.log('llegaste por aquí');
+
   const { petId, homeDescription, lifestyle } = req.body;
   try {
     const pet = await Pet.findById(petId);
@@ -24,4 +27,4 @@ const adoptPet = async (req, res) => {
   }
 };
 
-module.exports = {adoptPet};
+module.exports = { adoptPet };
