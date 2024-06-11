@@ -1,11 +1,13 @@
 const express = require('express');
-const { adoptPet } = require('../controllers/adoptionController');
+const { adoptPet, getAdoptionsByUserId } = require('../controllers/adoptionController');
 const authUser = require('../middlewares/authToken');
 
 // const { login } = require('../controllers/authController');
 // const auth = require('../middlewares/authMiddleware');
-const router = express.Router();
+const adoptionRoute = express.Router();
 
-router.post('/adopt', authUser, adoptPet);
+//Adopción
+adoptionRoute.post('/adopt', authUser, adoptPet);
+adoptionRoute.get('/', authUser, getAdoptionsByUserId); //requiere el token para listar las adopciones por ID
 
-module.exports = router;
+module.exports = adoptionRoute;

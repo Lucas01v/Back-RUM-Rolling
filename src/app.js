@@ -2,6 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const adoptionRouter = require('./routes/adoptionRoute');
 const authRoute = require('./routes/authRoute'); //
+const adminRoute = require('./routes/adminRoutes');
 const connectDB = require('./config/db');//conexión a la bd
 
 const app = express();
@@ -26,7 +27,9 @@ app.use(express.json());
 
 //rutas
 app.use('/api/auth', authRoute);
-app.use('/adoptions', adoptionRouter);
+app.use('/user/adoptions', adoptionRouter);
+app.use('/admin/adoptions', adminRoute);
+
 
 
 // Iniciar el servidor
