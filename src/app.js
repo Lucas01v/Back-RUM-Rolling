@@ -1,26 +1,42 @@
 const express = require('express');
-const mongoose = require('mongoose');
-const app = express();
+const cors = require('cors');
+const morgan = require('morgan');
+
+
 require('dotenv').config();
+// const petRoutes = require('./routes/petRoutes');
 
+const connectDB = require('./config/db');//conexión a la bd
+const authRoutes = require('./routes/authRoutes');
+// const userRoutes = require('./routes/userRoutes');
+const petRoutes = require('./routes/petRoutes');
+const userRouter = require('./routes/userRoutes');
 
+const app = express(); 
 
-// Middleware para parsear JSON
+app.use(morgan('combined'));
+
+// Configurar CORS
+
+app.use(morgan('combined'))
 app.use(express.json());
+app.use('/uploads', express.static('uploads'));
+app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
-// Conexión a MongoDB
+app.use('/pet', petRoutes);
+app.use('/user', userRouter);
+app.use('/auth', authRoutes);
 
-const mongoUrl = process.env.MONGO_URL;
-mongoose.connect(mongoUrl)
-    .then(() => {
-    console.log('Conectado a MongoDB');
-}).catch((err) => {
-    console.error('Error de conexión a MongoDB:', err);
-});
 
+connectDB(); 
 
 // Iniciar el servidor
-const PORT = process.env.PORT || 1000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
