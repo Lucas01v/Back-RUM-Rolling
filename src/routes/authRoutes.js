@@ -10,5 +10,4 @@ authRouter.post('/register', authController.registerUser);
 
 
 
-
 module.exports = authRouter;

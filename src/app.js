@@ -11,6 +11,7 @@ const authRoutes = require('./routes/authRoutes');
 // const userRoutes = require('./routes/userRoutes');
 const petRoutes = require('./routes/petRoutes');
 const userRouter = require('./routes/userRoutes');
+const adminRouter = require('./routes/adminRoutes');
 
 const app = express(); 
 
@@ -31,7 +32,7 @@ app.use(cors({
 app.use('/pet', petRoutes);
 app.use('/user', userRouter);
 app.use('/auth', authRoutes);
-
+app.use('/admin', adminRouter);
 
 connectDB(); 
 

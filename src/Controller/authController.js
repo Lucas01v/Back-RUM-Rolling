@@ -76,4 +76,5 @@ const registerUser = async (req, res) => {
     }
   }
 
-module.exports = { login, registerUser};
+
+module.exports = {login, registerUser};
