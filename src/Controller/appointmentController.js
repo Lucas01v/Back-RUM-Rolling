@@ -70,18 +70,12 @@ const getAppointmentsByDate = async (req, res) => {
 
 const cancelAppointment = async (req, res) => {
     try {
-        const { userId, appointmentId } = req.params;
+        const { appointmentId } = req.params;
 
-        // Verificar si el usuario existe
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'Usuario no encontrado' });
-        }
-
-        // Verificar si el turno pertenece al usuario
-        const appointment = await Appointment.findOne({ _id: appointmentId, user: userId });
+        // Verificar si el turno existe
+        const appointment = await Appointment.findById(appointmentId);
         if (!appointment) {
-            return res.status(404).json({ message: 'Turno no encontrado para este usuario' });
+            return res.status(404).json({ message: 'Turno no encontrado' });
         }
 
         // Eliminar el turno
@@ -92,5 +86,6 @@ const cancelAppointment = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 module.exports = {createAppointment, getAppointments, getAllAppointments, getAppointmentsByDate, cancelAppointment};

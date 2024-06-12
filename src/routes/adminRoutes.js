@@ -15,12 +15,12 @@ adminRouter.patch('/users/update/:userId',authMiddleware, checkRole(['admin']), 
 
 //Mascotas
 adminRouter.get('/pets', authMiddleware, checkRole(['admin']), getAllPets);
-adminRouter.delete('pets/delete/:id', authMiddleware, checkRole(['admin']), deletePet);
-adminRouter.patch('pets/update/:id', authMiddleware, checkRole(['admin']), updatePet);
+adminRouter.delete('/pets/delete/:id', authMiddleware, checkRole(['admin']), deletePet);
+adminRouter.patch('/pets/update/:id', authMiddleware, checkRole(['admin']), updatePet);
 
 //Turnos
 adminRouter.get('/appointments', authMiddleware, checkRole(['admin']), getAllAppointments);
-adminRouter.delete('/appointments/:userId/:appointmentId', authMiddleware, checkRole(['admin']), cancelAppointment);
+adminRouter.delete('/appointments/delete/:appointmentId', cancelAppointment);
 
 //Adopciones
 adminRouter.get('/adoption', authMiddleware, checkRole(['admin']), getAllAdoptions);
