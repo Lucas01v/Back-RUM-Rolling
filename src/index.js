@@ -24,7 +24,7 @@ app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://rum-front-rollingcode.vercel.app',
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
