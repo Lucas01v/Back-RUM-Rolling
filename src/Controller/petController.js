@@ -54,6 +54,26 @@ const getAllPets =  async (req, res) => {
             res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
         }
 };
+const getAllPetsAdopt =  async (req, res) => {
+    try {
+        const Adopt = req.params.petId;
+        const pets = await Pet.find();
+        res.status(200).send(pets);
+    } catch (err) {
+        res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
+    }
+};
+
+const getAllPetsUser =  async (req, res) => {
+    try {
+        const ownerId = req.params.ownerId;
+        const pets = await Pet.find();
+        res.status(200).send(pets);
+    } catch (err) {
+        res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
+    }
+};
+
 
 const deletePet = async (req, res) => {
     try {
@@ -133,4 +153,4 @@ const getPet = async (req, res) => {
     }
 };
 
-module.exports = {registerPet, getAllPets, deletePet, updatePet, getPet};
+module.exports = {registerPet, getAllPets, deletePet, updatePet, getPet, getAllPetsAdopt, getAllPetsUser};
