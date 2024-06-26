@@ -6,29 +6,45 @@ const path = require('path');
 const registerPet = async (req, res) => {
     try {
         const ownerId = req.params.ownerId;
-        const {species, name, race, sex, age } = req.body;
+        const { species, name, race, sex, age, isAdoptable } = req.body;
 
-        
-        const owner = await User.findById(ownerId);
-        if (!owner) {
-            return res.status(404).send({ error: 'Owner not found' });
+        let owner = null;
+
+        if (ownerId) {
+            owner = await User.findById(ownerId);
+            if (!owner) {
+                return res.status(404).send({ error: 'Owner not found' });
+            }
         }
 
         // Obtener la URL de la imagen si existe
         const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-        const newPet = new Pet({ owner: ownerId, species, name, race, sex, age, image });
+        const newPet = new Pet({
+            owner: isAdoptable ? null : ownerId,
+            species,
+            name,
+            breed: race,
+            sex,
+            age,
+            image,
+            isAdoptable
+        });
+
         await newPet.save();
 
-        // Agregar la nueva mascota al array de mascotas del usuario
-        owner.pets.push(newPet._id);
-        await owner.save();
+        if (owner) {
+            // Agregar la nueva mascota al array de mascotas del usuario si tiene dueño
+            owner.pets.push(newPet._id);
+            await owner.save();
+        }
 
         res.status(201).send(newPet);
     } catch (err) {
         res.status(400).send({ error: err.message });
     }
 };
+
 
 const getAllPets =  async (req, res) => {
         try {

@@ -5,7 +5,8 @@ const petSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        // required: true
+        default : null
     },
     species: {
         type: String,
@@ -27,6 +28,9 @@ const petSchema = new mongoose.Schema({
     age: {
         type: Number,
         required: true
+    },
+    isAdoptable: { 
+        type: Boolean, default: false // Indica si la mascota está disponible para adopción
     },
     image: {
         type: String,
