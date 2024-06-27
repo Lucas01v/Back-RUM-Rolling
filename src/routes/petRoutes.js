@@ -8,8 +8,8 @@ const petRouter = express.Router();
 
 // Rutas
 petRouter.get('/:id', authMiddleware, getPet);
-petRouter.get('/:ownerId',authMiddleware, getAllPets);
-petRouter.get('/adopt',authMiddleware, getAllPets);
+petRouter.get('/:ownerId',authMiddleware, getAllPetsUser);
+petRouter.get('/adopt',authMiddleware, getAllPetsAdop);
 petRouter.post('/register/:ownerId',authMiddleware, upload.single('image'), registerPet); // Modificado para manejar la subida de la imagen
 petRouter.delete('/delete/:id',authMiddleware, deletePet);
 petRouter.patch('/update/:id',authMiddleware, updatePet);
