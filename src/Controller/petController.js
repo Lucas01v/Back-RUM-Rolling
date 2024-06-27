@@ -21,14 +21,14 @@ const registerPet = async (req, res) => {
         const image = req.file ? `/uploads/${req.file.filename}` : null;
 
         const newPet = new Pet({
-            owner: isAdoptable ? null : ownerId,
+            owner: ownerId || null, // Asigna ownerId si está presente, de lo contrario, asigna null
             species,
             name,
             breed: race,
             sex,
             age,
             image,
-            isAdoptable
+            isAdoptable: isAdoptable !== undefined ? isAdoptable : ownerId ? false : true // Determina el valor de isAdoptable
         });
 
         await newPet.save();
@@ -46,6 +46,7 @@ const registerPet = async (req, res) => {
 };
 
 
+
 const getAllPets =  async (req, res) => {
         try {
             const pets = await Pet.find();
@@ -53,25 +54,6 @@ const getAllPets =  async (req, res) => {
         } catch (err) {
             res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
         }
-};
-const getAllPetsAdopt =  async (req, res) => {
-    try {
-        const Adopt = req.params.petId;
-        const pets = await Pet.find();
-        res.status(200).send(pets);
-    } catch (err) {
-        res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
-    }
-};
-
-const getAllPetsUser =  async (req, res) => {
-    try {
-        const ownerId = req.params.ownerId;
-        const pets = await Pet.find();
-        res.status(200).send(pets);
-    } catch (err) {
-        res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
-    }
 };
 
 
@@ -153,4 +135,4 @@ const getPet = async (req, res) => {
     }
 };
 
-module.exports = {registerPet, getAllPets, deletePet, updatePet, getPet, getAllPetsAdopt, getAllPetsUser};
+module.exports = {registerPet, getAllPets, deletePet, updatePet, getPet};
