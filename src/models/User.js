@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
     pets: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Pet'
+    }],
+    Adoption: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Adoption'
     }]
 
 }, { collection: 'users' });

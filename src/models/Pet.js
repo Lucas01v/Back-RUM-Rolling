@@ -29,9 +29,9 @@ const petSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    isAdoptable: { 
+   /*  isAdoptable: { 
         type: Boolean, default: false // Indica si la mascota está disponible para adopción
-    },
+    }, */
     image: {
         type: String,
         required: false

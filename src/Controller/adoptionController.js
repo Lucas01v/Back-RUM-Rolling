@@ -27,7 +27,7 @@ const adoptPet = async (req, res) => {
   }
 };
 
-// Función para obtener todas las adopciones
+// Función para obtener todas las adopciones (ADMIN)
 const getAllAdoptions = async (req, res) => {
   try {
     
@@ -41,15 +41,17 @@ const getAllAdoptions = async (req, res) => {
   }
 };
 
+// Función para listar adopciones de un usuario (por userID)
+
 const getAdoptionsByUserId = async (req, res) => {
   try {
-    const adoptions = await Adoption.find({ userId: req.user.id }).populate('petId');
+    const adoptions = await Adoption.find({ userId: req.params.userId });
     res.json(adoptions);
   } catch (err) {
-    console.error(err.message);
+    console.error('Error fetching user adoptions:', err.message);
     res.status(500).send('Server error');
   }
-};
+}; 
 
 const updateAdoption = async (req, res) => {
   const { homeDescription, lifestyle } = req.body;
@@ -93,4 +95,13 @@ const deleteAdoption = async (req, res) => {
   }
 };
 
-module.exports = { adoptPet, getAdoptionsByUserId, getAllAdoptions ,updateAdoption, deleteAdoption };
+// Función para listar todas las mascotas sin dueño
+const listAdoptablePets = async (req, res) => {
+  try {
+      const adoptablePets = await Pet.find({ owner: null }); // Busca todas las mascotas que no tienen dueño
+      res.status(200).json(adoptablePets); // Responde con el estado 200 (ok) y la lista de mascotas adoptables
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching adoptable pets', error }); // Si ocurre un error, responde con 500 (error interno del servidor)
+  }
+};
+module.exports = { getAllAdoptions, getAdoptionsByUserId, adoptPet, updateAdoption, deleteAdoption, listAdoptablePets };
