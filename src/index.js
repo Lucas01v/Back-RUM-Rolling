@@ -24,7 +24,7 @@ app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 app.use(express.json());
 app.use(cors({
-    origin: 'https://rum-front-rollingcode.vercel.app',
+    origin: ['http://localhost:5173', 'https://pet-web-portal.netlify.app'],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
