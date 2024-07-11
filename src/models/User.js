@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
 
 }, { collection: 'users' });
 
-// Middleware para hashear la contraseña antes de guardar
+
 userSchema.pre('save', async function (next) {
     if (this.isModified('password') || this.isNew) {
         try {
@@ -55,7 +55,7 @@ userSchema.pre('save', async function (next) {
     }
 });
 
-// Crear el modelo de User
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

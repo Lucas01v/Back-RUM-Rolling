@@ -5,13 +5,12 @@ const petSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        // required: true
         default : null
     },
     species: {
         type: String,
         required: true,
-        enum: ['canine', 'feline'] // Asegura que solo se permiten estos dos valores
+        enum: ['canine', 'feline'] 
     },
     name: {
         type: String,
@@ -29,16 +28,13 @@ const petSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-   /*  isAdoptable: { 
-        type: Boolean, default: false // Indica si la mascota está disponible para adopción
-    }, */
     image: {
         type: String,
         required: false
     },
     timestamp: {
         type: Date,
-        default: Date.now // Asigna automáticamente la fecha y hora actual
+        default: Date.now
     }
 }, { collection: 'pets' });
 

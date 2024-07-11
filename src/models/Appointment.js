@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Esquema para las citas
+
 const appointmentSchema = new mongoose.Schema({
     type: { 
         type: String, 

@@ -17,24 +17,24 @@ const registerPet = async (req, res) => {
             }
         }
 
-        // Obtener la URL de la imagen si existe
+        
         const image = req.file ? `/uploads/${req.file.filename}` : null;
 
         const newPet = new Pet({
-            owner: ownerId || null, // Asigna ownerId si está presente, de lo contrario, asigna null
+            owner: ownerId || null, 
             species,
             name,
             breed: race,
             sex,
             age,
             image,
-            isAdoptable: isAdoptable !== undefined ? isAdoptable : ownerId ? false : true // Determina el valor de isAdoptable
+            isAdoptable: isAdoptable !== undefined ? isAdoptable : ownerId ? false : true 
         });
 
         await newPet.save();
 
         if (owner) {
-            // Agregar la nueva mascota al array de mascotas del usuario si tiene dueño
+            
             owner.pets.push(newPet._id);
             await owner.save();
         }
@@ -63,13 +63,11 @@ const deletePet = async (req, res) => {
         if (!pet) {
             return res.status(404).send({ error: 'Mascota no encontrada' });
         }
-
-         // Eliminar la foto de la mascota si existe
          if (pet.image) {
-            const imagePath = path.join(__dirname, '..', pet.image); // Construye la ruta completa de la imagen
+            const imagePath = path.join(__dirname, '..', pet.image); 
             console.log('Ruta completa de la imagen:', imagePath);
 
-            // Verificar manualmente si el archivo existe usando métodos asincrónicos
+            
             fs.access(imagePath, fs.constants.F_OK, (err) => {
                 if (!err) {
                     console.log('El archivo de la imagen existe, eliminando...');
@@ -85,18 +83,16 @@ const deletePet = async (req, res) => {
                 }
             });
         }
-
-        // Eliminar la mascota del array de mascotas del propietario
         console.log('Eliminando mascota del usuario');
         const owner = await User.findById(pet.owner);
         if (owner) {
             console.log('Usuario encontrado');
-            owner.pets.pull(pet._id); // Elimina la mascota del array de mascotas del usuario
+            owner.pets.pull(pet._id); 
             await owner.save();
             console.log('Mascota eliminada del usuario');
         }
 
-        // Eliminar la mascota de la base de datos
+        
         console.log('Eliminando mascota de la base de datos');
         await Pet.findByIdAndDelete(req.params.id);
         console.log('Mascota eliminada de la base de datos');

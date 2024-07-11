@@ -4,11 +4,10 @@ const morgan = require('morgan');
 
 
 require('dotenv').config();
-// const petRoutes = require('./routes/petRoutes');
 
-const connectDB = require('./config/db');//conexión a la bd
+
+const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
-// const userRoutes = require('./routes/userRoutes');
 const petRoutes = require('./routes/petRoutes');
 const userRouter = require('./routes/userRoutes');
 const adminRouter = require('./routes/adminRoutes');
@@ -17,7 +16,6 @@ const app = express();
 
 app.use(morgan('combined'));
 
-// Configurar CORS
 
 app.use(morgan('combined'))
 app.use(express.json());
@@ -36,7 +34,6 @@ app.use('/admin', adminRouter);
 
 connectDB(); 
 
-// Iniciar el servidor
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);

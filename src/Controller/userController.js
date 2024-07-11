@@ -1,7 +1,6 @@
-//TRAE LOS USUARIOS DE LA BD
 const User = require('../models/User');
 
-// Listar usuarios de la BD
+
 async function getAllUsers(req, res) {
   try {
     console.log("Recuperando usuarios...");
@@ -13,7 +12,7 @@ async function getAllUsers(req, res) {
       return res.status(404).json({ message: 'No se encontraron usuarios' });
     }
 
-    // Envía la respuesta con los usuarios recuperados
+    
     return res.status(200).json({ message: 'Usuarios recuperados de forma exitosa', usuarios: users });
   } catch (error) {
     console.error("Error al recuperar usuarios:", error);
@@ -21,18 +20,13 @@ async function getAllUsers(req, res) {
   }
 }
 
-// Obtener todas las mascotas de un usuario por su ID
 const getUserPets = async (req, res) => {
   try {
       const userId = req.params.userId;
-
-      // Buscar al usuario por su ID
       const user = await User.findById(userId).populate('pets');
       if (!user) {
           return res.status(404).json({ error: 'Usuario no encontrado' });
       }
-
-      // Devolver las mascotas del usuario
       res.status(200).json({ message: 'Mascotas recuperadas exitosamente', pets: user.pets });
   } catch (error) {
       console.error("Error al recuperar las mascotas del usuario:", error);
@@ -40,9 +34,7 @@ const getUserPets = async (req, res) => {
   }
 };
 
-//Editar usuario por id
 
-// Actualizar un usuario por su ID
 const updateUser = async (req, res) => {
   
   const { email, password, name, DNI, phone } = req.body;
@@ -51,8 +43,6 @@ const updateUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'Usuario no encontrado' });
     }
-
-    // Verificar si los campos a actualizar son válidos
     const allowedFields = ['email', 'password', 'name', 'DNI', 'phone'];
     const fieldsToUpdate = {};
     Object.keys(req.body).forEach(field => {
@@ -61,7 +51,6 @@ const updateUser = async (req, res) => {
       }
     });
 
-    // Actualizar usuario con los campos especificados
     user = await User.findByIdAndUpdate(req.params.userId, { $set: fieldsToUpdate }, { new: true });
 
     res.json(user);
@@ -74,14 +63,14 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-      const userId = req.body.userId; // Obtener el ID del usuario desde el cuerpo de la solicitud
-      const deletedUser = await User.findByIdAndDelete(userId); // Buscar y eliminar al usuario por su ID
+      const userId = req.body.userId; 
+      const deletedUser = await User.findByIdAndDelete(userId); 
       if (!deletedUser) {
-          return res.status(404).json({ error: 'Usuario no encontrado' }); // Si el usuario no se encuentra, devuelve un error
+          return res.status(404).json({ error: 'Usuario no encontrado' }); 
       }
-      res.status(200).json({ message: 'Usuario eliminado correctamente' }); // Si se elimina correctamente, devuelve un mensaje de éxito
+      res.status(200).json({ message: 'Usuario eliminado correctamente' }); 
   } catch (error) {
-      res.status(500).json({ error: 'Error al eliminar usuario', message: error.message }); // Si hay algún error, devuelve un error
+      res.status(500).json({ error: 'Error al eliminar usuario', message: error.message }); 
   }
 };
 
