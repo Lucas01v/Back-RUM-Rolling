@@ -1,49 +1,63 @@
 const Pet = require('../models/Pet');
 const User = require('../models/User');
-const fs = require('fs');
-const path = require('path');
+const cloudinary = require('../config/cloudinary');
+// const fs = require('fs');
+// const path = require('path');
 
 const registerPet = async (req, res) => {
     try {
-        const ownerId = req.params.ownerId;
-        const { species, name, race, sex, age, isAdoptable } = req.body;
-
-        let owner = null;
-
-        if (ownerId) {
-            owner = await User.findById(ownerId);
-            if (!owner) {
-                return res.status(404).send({ error: 'Owner not found' });
+      const ownerId = req.params.ownerId;
+      const { species, name, race, sex, age, isAdoptable } = req.body;
+  
+      let owner = null;
+  
+      if (ownerId) {
+        owner = await User.findById(ownerId);
+        if (!owner) {
+          return res.status(404).send({ error: 'Owner not found' });
+        }
+      }
+  
+      let image = null;
+      if (req.file) {
+        const result = await new Promise((resolve, reject) => {
+          cloudinary.uploader.upload_stream(
+            {
+              folder: 'pets', // Especifica la carpeta de destino en Cloudinary
+              resource_type: 'image',
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
             }
-        }
-
-        
-        const image = req.file ? `/uploads/${req.file.filename}` : null;
-
-        const newPet = new Pet({
-            owner: ownerId || null, 
-            species,
-            name,
-            breed: race,
-            sex,
-            age,
-            image,
-            isAdoptable: isAdoptable !== undefined ? isAdoptable : ownerId ? false : true 
+          ).end(req.file.buffer);
         });
-
-        await newPet.save();
-
-        if (owner) {
-            
-            owner.pets.push(newPet._id);
-            await owner.save();
-        }
-
-        res.status(201).send(newPet);
+        image = result.secure_url;
+      }
+  
+      const newPet = new Pet({
+        owner: ownerId || null,
+        species,
+        name,
+        race,
+        sex,
+        age,
+        image,
+        isAdoptable: isAdoptable !== undefined ? isAdoptable : ownerId ? false : true,
+      });
+  
+      await newPet.save();
+  
+      if (owner) {
+        owner.pets.push(newPet._id);
+        await owner.save();
+      }
+  
+      res.status(201).send(newPet);
     } catch (err) {
-        res.status(400).send({ error: err.message });
+      res.status(400).send({ error: err.message });
     }
-};
+  };
 
 
 

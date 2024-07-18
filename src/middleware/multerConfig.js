@@ -1,16 +1,17 @@
+// middlewares/multer.js
 const multer = require('multer');
-const path = require('path');
 
+const storage = multer.memoryStorage();
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'src/uploads/'); 
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname));
+const upload = multer({
+  storage: storage,
+  fileFilter: function (req, file, cb) {
+    if (!file.mimetype.startsWith('image/')) {
+      return cb(new Error('Formato de archivo no soportado'), false);
     }
+    cb(null, true);
+  },
+  limits: { fileSize: 1024 * 1024 * 5 } // 5 MB máximo
 });
-
-const upload = multer({ storage: storage });
 
 module.exports = upload;
