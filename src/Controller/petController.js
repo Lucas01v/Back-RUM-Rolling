@@ -120,17 +120,36 @@ const deletePet = async (req, res) => {
 
 const updatePet = async (req, res) => {
     try {
-        const { id } = req.params;
-        const updateData = req.body;
-        const petUpdated = await Pet.findByIdAndUpdate(id, updateData, { new: true });
-        if (!petUpdated) {
-            return res.status(404).json({ message: 'Mascota no encontrada' });
-        }
-        res.status(200).json({ message: 'Mascota actualizada exitosamente', pet: petUpdated });
+      const { id } = req.params;
+      const updateData = req.body;
+  
+      // Manejar la actualización de la imagen si hay un archivo en la solicitud
+      if (req.file) {
+        const result = await new Promise((resolve, reject) => {
+          cloudinary.uploader.upload_stream(
+            {
+              folder: 'pets', // Especifica la carpeta de destino en Cloudinary
+              resource_type: 'image',
+            },
+            (error, result) => {
+              if (error) reject(error);
+              else resolve(result);
+            }
+          ).end(req.file.buffer);
+        });
+        updateData.image = result.secure_url;
+      }
+  
+      const petUpdated = await Pet.findByIdAndUpdate(id, updateData, { new: true });
+      if (!petUpdated) {
+        return res.status(404).json({ message: 'Mascota no encontrada' });
+      }
+  
+      res.status(200).json({ message: 'Mascota actualizada exitosamente', pet: petUpdated });
     } catch (error) {
-        res.status(500).json({ message: 'Error al actualizar la mascota', error: error.message });
+      res.status(500).json({ message: 'Error al actualizar la mascota', error: error.message });
     }
-};
+  };
 
 const getPet = async (req, res) => {
     try {

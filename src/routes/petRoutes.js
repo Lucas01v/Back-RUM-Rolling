@@ -9,7 +9,7 @@ const petRouter = express.Router();
 petRouter.get('/', authMiddleware, getAllPets);
 petRouter.get('/:id', authMiddleware, getPet);
 petRouter.post('/register/:ownerId?', authMiddleware, upload.single('image'), registerPet);
-petRouter.patch('/update/:id',authMiddleware, updatePet);
+petRouter.patch('/update/:id', authMiddleware, upload.single('image'), updatePet);
 petRouter.delete('/delete/:id',authMiddleware, deletePet);
 
 module.exports = petRouter;
